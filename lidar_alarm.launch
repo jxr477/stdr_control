@@ -1,0 +1,3 @@
+<launch>
+  <node name="lidar_alarm_node" pkg="stdr_control" type="lidar_alarm_node" output="screen" />
+</launch>
