@@ -4,6 +4,7 @@
 #include <sensor_msgs/LaserScan.h>
 #include <std_msgs/Float32.h> //Including the Float32 class from std_msgs
 #include <std_msgs/Bool.h> // boolean message 
+#include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
 #include <stdlib.h>
 
@@ -133,13 +134,17 @@ double time = 2;
 int main(int argc, char **argv) {
     ros::init(argc, argv, "lidar_alarm"); //name this node
     ros::NodeHandle nh; 
+    
+    std_msgs::String topic_name;
+    std::stringstream ss;
+    ss << "/robot0/laser_1";
+    topic_name.data = ss.str();
 
-    char* topic_name = "lidar1";
     int opt;
     while ((opt = getopt(argc, (argv), "n:")) != -1) {
       switch (opt) {
         case 'n':
-	  topic_name = optarg;
+	  topic_name.data = optarg;
 	  break;
 	default:
 	  printf("The -%c is not a recognized parameter\n", opt);
@@ -149,12 +154,12 @@ int main(int argc, char **argv) {
     twist_commander = nh.advertise<geometry_msgs::Twist>("/robot0/cmd_vel", 1);
 
     //create a Subscriber object and have it subscribe to the lidar topic
-    ros::Publisher pub = nh.advertise<std_msgs::Bool>(topic_name, 1);
+    ros::Publisher pub = nh.advertise<std_msgs::Bool>("lidar_alarm", 1);
     lidar_alarm_publisher_ = pub; // let's make this global, so callback can use it
     ros::Publisher pub2 = nh.advertise<std_msgs::Float32>("lidar_dist", 1);  
     lidar_dist_publisher_ = pub2;
 
-    ros::Subscriber lidar_subscriber = nh.subscribe("robot0/laser_1", 1, &laserCallback);
+    ros::Subscriber lidar_subscriber = nh.subscribe(topic_name.data.c_str(), 1, &laserCallback);
     ros::spin(); //this is essentially a "while(1)" statement, except it
     // forces refreshing wakeups upon new data arrival
 
