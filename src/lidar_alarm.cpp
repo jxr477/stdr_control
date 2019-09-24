@@ -5,7 +5,7 @@
 #include <std_msgs/Float32.h> //Including the Float32 class from std_msgs
 #include <std_msgs/Bool.h> // boolean message 
 #include <geometry_msgs/Twist.h>
-
+#include <stdlib.h>
 
 const double MIN_SAFE_DISTANCE = 0.8; // set alarm if anything is within 0.8m of the front of robot
 
