@@ -134,10 +134,22 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "lidar_alarm"); //name this node
     ros::NodeHandle nh; 
 
+    char* topic_name = "lidar1";
+    int opt;
+    while ((opt = getopt(argc, (argv), "n:")) != -1) {
+      switch (opt) {
+        case 'n':
+	  topic_name = optarg;
+	  break;
+	default:
+	  printf("The -%c is not a recognized parameter\n", opt);
+	  break;
+	}
+    }
     twist_commander = nh.advertise<geometry_msgs::Twist>("/robot0/cmd_vel", 1);
 
     //create a Subscriber object and have it subscribe to the lidar topic
-    ros::Publisher pub = nh.advertise<std_msgs::Bool>("lidar_alarm", 1);
+    ros::Publisher pub = nh.advertise<std_msgs::Bool>(topic_name, 1);
     lidar_alarm_publisher_ = pub; // let's make this global, so callback can use it
     ros::Publisher pub2 = nh.advertise<std_msgs::Float32>("lidar_dist", 1);  
     lidar_dist_publisher_ = pub2;
