@@ -1,5 +1,6 @@
 <launch>
-
+  
+  <include file="$(find stdr_launchers)/launch/server_with_map_and_gui.launch" />
   <include file="$(find stdr_control)/lidar_alarm.launch" />
 
 </launch>
